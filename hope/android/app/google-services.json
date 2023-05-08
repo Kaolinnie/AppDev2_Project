@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "126084996814",
+    "project_id": "hope-2bd8d",
+    "storage_bucket": "hope-2bd8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126084996814:android:d1b01695a23b64014dba9f",
+        "android_client_info": {
+          "package_name": "com.vanier.hope"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126084996814-cvfr7idcul2he23omollg0iqbksmfdga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAskA38BSMwnp-_c2-XJqJ5XnVWY7PSswE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126084996814-cvfr7idcul2he23omollg0iqbksmfdga.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "126084996814-5ft1ip7q3lk8itm4dj3mkrau7nkpgq8v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "vaniercollege.hope.hope"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126084996814:android:567b75ac85cf321e4dba9f",
+        "android_client_info": {
+          "package_name": "vaniercollege.hope.hope"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126084996814-cvfr7idcul2he23omollg0iqbksmfdga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAskA38BSMwnp-_c2-XJqJ5XnVWY7PSswE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126084996814-cvfr7idcul2he23omollg0iqbksmfdga.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "126084996814-5ft1ip7q3lk8itm4dj3mkrau7nkpgq8v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "vaniercollege.hope.hope"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

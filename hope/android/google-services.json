@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "126084996814",
+    "project_id": "hope-2bd8d",
+    "storage_bucket": "hope-2bd8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126084996814:android:d1b01695a23b64014dba9f",
+        "android_client_info": {
+          "package_name": "com.vanier.hope"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126084996814-v33psr60rgu55rv38t19rmdog22ckfqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAskA38BSMwnp-_c2-XJqJ5XnVWY7PSswE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126084996814-v33psr60rgu55rv38t19rmdog22ckfqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
