@@ -16,7 +16,7 @@ TextField reusableText(String text, IconData icon, bool isPasswordType, TextEdit
       labelStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
       filled: true,
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      fillColor: Colors.white.withOpacity(0.3),
+      fillColor: Colors.white.withOpacity(0.2),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         borderSide: const BorderSide(
