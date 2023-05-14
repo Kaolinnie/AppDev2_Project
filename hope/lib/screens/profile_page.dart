@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hope/authentication/auth.dart';
+import 'package:hope/screens/pop_up/edit_profile.dart';
 import 'package:hope/widgets/userWidgets.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
     await Auth().signOut();
   }
   Future<void> editProfile() async {
-    print('editing profile');
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
   }
   Widget _userUid() => Text(user?.email ?? 'User email');
   Widget _signOutButton() => IconButton(
