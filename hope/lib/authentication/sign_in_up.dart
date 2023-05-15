@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hope/authentication/auth.dart';
+import 'package:hope/authentication/collections.dart';
+import 'package:hope/classes/user.dart';
 import 'package:hope/utils/color_utils.dart';
 import 'package:hope/widgets/widgets.dart';
 
@@ -44,7 +46,7 @@ class _SignInUpScreenState extends State<SignInUpScreen> {
 
     try {
       await Auth().createUserWithEmailAndPassword(email: emailTec.text, password: passwordTec.text, displayName: "${firstNameTec.text} ${lastNameTec.text}");
-      await Auth().addUser(firstNameTec.text, lastNameTec.text);
+      await Collections().createUser(firstNameTec.text, lastNameTec.text);
     } on FirebaseAuthException catch(e) {
       errorMessage = e.message;
       _sendErrorMessage();

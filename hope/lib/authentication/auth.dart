@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final users = FirebaseFirestore.instance.collection('users');
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -56,13 +54,4 @@ class Auth {
   }
 
   bool verified() { return currentUser!.emailVerified; }
-
-  Future<void> addUser(first_name,last_name) async {
-    users
-      .doc(currentUser?.email)
-      .set({
-      'first_name':first_name,
-      'last_name':last_name
-    }).then((value)=>print("user added")).catchError((error)=>print("failed to add user: $error"));
-  }
 }
