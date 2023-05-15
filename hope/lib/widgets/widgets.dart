@@ -29,6 +29,7 @@ TextField reusableText(String text, IconData icon, bool isPasswordType, TextEdit
   );
 }
 
+
 TextField reusableText2(String text, TextEditingController controller, {
   icon,
   isPasswordType = false,
@@ -61,6 +62,38 @@ TextField reusableText2(String text, TextEditingController controller, {
   );
 }
 
+TextField reusableText3(String text, TextEditingController controller, {
+  icon,
+  textInputType = TextInputType.text
+}) {
+  return TextField(
+    controller: controller,
+    obscureText: false,
+    enableSuggestions: true,
+    cursorColor: Colors.white,
+    style: TextStyle(
+        color: Colors.white.withOpacity(0.9)
+    ),
+    decoration: InputDecoration(
+      prefixIcon: Icon(icon, color: Colors.white70,),
+      labelText: text,
+      labelStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
+      filled: true,
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      fillColor: Colors.white.withOpacity(0.2),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: const BorderSide(
+            width: 0,
+            style: BorderStyle.none
+        ),
+      ),
+    ),
+    keyboardType: textInputType,
+  );
+}
+
+
 SizedBox sizedColumn(
     {required double size, required List<Widget> widgets, MainAxisAlignment? mainAxisAlignment}){
   return SizedBox(
@@ -72,9 +105,9 @@ SizedBox sizedColumn(
   );
 }
 
-SizedBox gap(){
-  return const SizedBox(
-    height: 10
+SizedBox gap({double? size = 15}){
+  return SizedBox(
+    height: size
   );
 }
 

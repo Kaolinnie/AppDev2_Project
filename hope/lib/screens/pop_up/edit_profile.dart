@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hope/utils/styles.dart';
 import 'package:hope/widgets/widgets.dart';
@@ -18,11 +19,15 @@ class _EditProfileState extends State<EditProfile> {
 
   final _picker = ImagePicker();
 
+  Future<void> updateProfile() async {
+    String displayName = _displayNameTec.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile')
+        title: const Text('Edit Profile')
       ),
       body: SizedBox(
         width: double.infinity,
@@ -32,13 +37,14 @@ class _EditProfileState extends State<EditProfile> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                reusableText2("First name", _firstNameTec,textInputType: TextInputType.name),
-                gap(),
-                reusableText2("Last name", _lastNameTec,textInputType: TextInputType.name),
-                gap(),
                 reusableText2("Display name", _displayNameTec,textInputType: TextInputType.name),
                 gap(),
                 reusableText2("Phone number", _phoneNumTec,textInputType: TextInputType.phone,icon:Icons.phone),
+                gap(),
+                ElevatedButton(
+                  onPressed: updateProfile,
+                  child: const Text('Update')
+                ),
               ],
 
           ),

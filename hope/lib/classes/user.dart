@@ -4,9 +4,4 @@ class User {
   final String firstName, lastName;
 
   const User(this.id, this.email, this.firstName, this.lastName);
-
-  @override
-  String toString() {
-    return '$firstName $lastName';
-  }
 }

@@ -7,3 +7,5 @@ profileName(String name) => Text(
     fontWeight: FontWeight.bold
   ),
 );
+
+Widget title() => const Text('Hope');

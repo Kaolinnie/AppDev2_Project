@@ -15,9 +15,15 @@ class _SignInUpScreenState extends State<SignInUpScreen> {
   String? errorMessage = '';
   bool isLogin = true;
 
-  TextEditingController emailTec = TextEditingController();
-  TextEditingController passwordTec = TextEditingController();
-  TextEditingController confirmPasswordTec = TextEditingController();
+  final emailTec = TextEditingController();
+  final passwordTec = TextEditingController();
+  final confirmPasswordTec = TextEditingController();
+  final phoneTec = TextEditingController();
+  final firstNameTec = TextEditingController();
+  final lastNameTec = TextEditingController();
+  final codeSentTec = TextEditingController();
+
+  late PhoneAuthCredential credential;
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -28,44 +34,23 @@ class _SignInUpScreenState extends State<SignInUpScreen> {
     }
   }
   Future<void> createUserWithEmailAndPassword() async {
-    if(passwordTec.text != confirmPasswordTec.text) {
-      errorMessage = 'Passwords do not match';
-      ScaffoldMessenger.of(context).showSnackBar(_errorMessage());
+    if(firstNameTec.text == '' || lastNameTec.text == '') errorMessage = '$errorMessage\nPlease enter your name';
+    if(passwordTec.text != confirmPasswordTec.text) errorMessage = '$errorMessage\nPasswords do not match';
+
+    if (errorMessage!=''){
+      _sendErrorMessage();
       return;
     }
 
     try {
-      await Auth().createUserWithEmailAndPassword(email: emailTec.text, password: passwordTec.text);
+      await Auth().createUserWithEmailAndPassword(email: emailTec.text, password: passwordTec.text, displayName: "${firstNameTec.text} ${lastNameTec.text}");
+      await Auth().addUser(firstNameTec.text, lastNameTec.text);
     } on FirebaseAuthException catch(e) {
       errorMessage = e.message;
-      ScaffoldMessenger.of(context).showSnackBar(_errorMessage());
+      _sendErrorMessage();
     }
+
   }
-
-  SnackBar _errorMessage() => SnackBar(
-      content: Text(errorMessage!),
-    backgroundColor: hexStringToColor("#D9793D"),
-    behavior: SnackBarBehavior.floating,
-  );
-
-  Widget _submitButton() => ElevatedButton(
-    onPressed: isLogin ? signInWithEmailAndPassword : createUserWithEmailAndPassword,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: hexStringToColor("#D9793D")
-    ),
-    child: Text(isLogin? 'Login' : 'Register')
-  );
-
-  Widget _loginOrRegisterButton() => TextButton(
-    onPressed: (){
-      setState((){
-        isLogin = !isLogin;
-      });
-    },
-    child: Text(isLogin?'Don\'t have an account?':'Already have an account?', style: const TextStyle(
-      color: Colors.white
-    ))
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -84,38 +69,29 @@ class _SignInUpScreenState extends State<SignInUpScreen> {
           )
         ),
         child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Column(
-                  children: [
-                    Text('Hope', style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 50,
-                      fontFamily: 'ShadowsIntoLight'
-                    )),
-                    // ClipRRect(
-                    //   borderRadius: BorderRadius.circular(20),
-                    //   child: Image.network("https://wallpaperaccess.com/full/384178.jpg",
-                    //     height: 300,
-                    //     width: 300,
-                    //     fit: BoxFit.cover,
-                    //   ),
-                    // ),
-                  ],
-                ),
-                content()
-              ],
-            )
+            padding: const EdgeInsets.all(25),
+            child: content()
         )
-      )
-    );
+        )
+      );
   }
 
-  Widget content() => isLogin ? login() : register();
+  Widget content() => Column(
+    children: [
+      const Text('Hope', style: TextStyle(
+          color: Colors.white,
+          fontSize: 50,
+          fontFamily: 'ShadowsIntoLight'
+      )),
+      Expanded(
+        child: isLogin ? login() : registerPages()
+      ),
+    ],
+  );
+
 
   Widget login() => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       sizedColumn(
           widgets: [
@@ -127,17 +103,83 @@ class _SignInUpScreenState extends State<SignInUpScreen> {
     ],
   );
 
-  Widget register() => Column(
-    children: [
-      sizedColumn(
-          widgets: [
-            reusableText("Enter email", Icons.person_outline, false, emailTec),
-            reusableText("Enter password", Icons.lock, true, passwordTec),
-            reusableText("Confirm password", Icons.check, true, confirmPasswordTec),
-          ], mainAxisAlignment: MainAxisAlignment.spaceBetween, size: 200),
-      _submitButton(),
-      _loginOrRegisterButton()
-    ],
+  Widget registerPages() {
+    final pageController = PageController();
+    return PageView(
+      scrollDirection: Axis.horizontal,
+      controller: pageController,
+      children: [
+        Container(
+          height: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  reusableText3("Enter first name", firstNameTec, textInputType: TextInputType.name, icon: Icons.abc),
+                  gap(),
+                  reusableText3("Enter last name", lastNameTec, textInputType: TextInputType.name, icon: Icons.abc),
+                ],
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    pageController.nextPage(duration: const Duration(milliseconds: 200), curve: Curves.linear);
+                  },
+                  child: const Text('Next')
+              ),
+              _loginOrRegisterButton()
+
+            ],
+          ),
+        ),
+        Container(
+          height: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  reusableText("Enter email", Icons.person_outline, false, emailTec),
+                  gap(),
+                  reusableText("Enter password", Icons.lock, true, passwordTec),
+                  gap(),
+                  reusableText("Confirm password", Icons.check, true, confirmPasswordTec),
+                ],
+              ),
+              _submitButton(),
+              _loginOrRegisterButton()
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _sendErrorMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(_errorMessage());
+    errorMessage = '';
+  }
+
+  SnackBar _errorMessage() => SnackBar(
+    content: Text(errorMessage!),
+    backgroundColor: hexStringToColor("#D9793D"),
+    behavior: SnackBarBehavior.floating,
+  );
+
+  Widget _submitButton() => ElevatedButton(
+      onPressed: isLogin ? signInWithEmailAndPassword : createUserWithEmailAndPassword,
+      child: Text(isLogin? 'Login' : 'Register')
+  );
+
+  Widget _loginOrRegisterButton() => TextButton(
+      onPressed: (){
+        setState((){
+          isLogin = !isLogin;
+        });
+      },
+      child: Text(isLogin?'Don\'t have an account?':'Already have an account?', style: const TextStyle(
+          color: Colors.white
+      ))
   );
 }
 

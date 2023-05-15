@@ -4,6 +4,10 @@ import 'package:hope/authentication/auth.dart';
 import 'package:hope/screens/home_page.dart';
 import 'package:hope/screens/posts_page.dart';
 import 'package:hope/screens/profile_page.dart';
+import 'dart:async';
+
+import '../authentication/unverified.dart';
+import '../widgets/userWidgets.dart';
 
 class AppPage extends StatefulWidget {
   const AppPage({Key? key}) : super(key: key);
@@ -14,7 +18,9 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   final User? user = Auth().currentUser;
-  Widget _title() => const Text('Hope');
+
+  bool verified = false;
+  Timer? timer;
 
   int _selectedIndex = 0;
 
@@ -35,10 +41,49 @@ class _AppPageState extends State<AppPage> {
   );
 
   @override
+  void initState() {
+    super.initState();
+
+    checkEmailVerified();
+
+    verified = Auth().verified();
+
+    if(!verified) {
+      Auth().sendEmailVerification();
+
+      timer = Timer.periodic(
+          Duration(seconds:3),
+              (_) => checkEmailVerified()
+      );
+    }
+
+  }
+
+  Future checkEmailVerified() async {
+    await Auth().reloadUser();
+
+    setState(() {
+      verified = Auth().verified();
+    });
+
+    if (verified) timer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return verified ? app() : const Unverified();
+  }
+
+  Widget app() {
     return Scaffold(
       appBar: AppBar(
-        title: _title(),
+        title: title(),
         actions: [
           IconButton(
             onPressed: () {
@@ -47,8 +92,8 @@ class _AppPageState extends State<AppPage> {
               });
             },
             icon: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: _userPhoto()
+                borderRadius: BorderRadius.circular(20),
+                child: _userPhoto()
 
             ),
           ),
@@ -59,31 +104,32 @@ class _AppPageState extends State<AppPage> {
           width: double.infinity,
           height: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: _widgetOptions[_selectedIndex]
+              padding: const EdgeInsets.all(10),
+              child: _widgetOptions[_selectedIndex]
           )
 
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home'
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.add_box_outlined),
-              label: 'Post'
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile'
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        iconSize: 40,
-        onTap: _onItemTapped,
-        elevation: 5
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home'
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.add_box_outlined),
+                label: 'Post'
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile'
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          iconSize: 40,
+          onTap: _onItemTapped,
+          elevation: 5
       ),
     );
   }
 }
+
