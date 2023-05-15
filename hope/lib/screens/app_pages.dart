@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hope/authentication/auth.dart';
 import 'package:hope/screens/home_page.dart';
+import 'package:hope/screens/pop_up/adopt_page.dart';
+import 'package:hope/screens/pop_up/settings.dart';
 import 'package:hope/screens/posts_page.dart';
 import 'package:hope/screens/profile_page.dart';
 import 'dart:async';
@@ -27,6 +29,7 @@ class _AppPageState extends State<AppPage> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     PostsPage(),
+    AdoptPage(),
     ProfilePage()
   ];
 
@@ -35,10 +38,6 @@ class _AppPageState extends State<AppPage> {
       _selectedIndex = index;
     });
   }
-
-  Widget _userPhoto() => Image.network(
-    user?.photoURL??'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
-  );
 
   @override
   void initState() {
@@ -87,14 +86,11 @@ class _AppPageState extends State<AppPage> {
         actions: [
           IconButton(
             onPressed: () {
-              setState(() {
-                _selectedIndex = 2;
-              });
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
             },
             icon: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: _userPhoto()
-
+                child: Icon(Icons.settings)
             ),
           ),
         ],
@@ -118,6 +114,10 @@ class _AppPageState extends State<AppPage> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.add_box_outlined),
                 label: 'Post'
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.pets),
+                label: 'Adopt'
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person),

@@ -15,7 +15,7 @@ class Collections {
       uid: currentUser!.uid,
       email: currentUser!.email??''
     );
-    final docRef = users.withConverter(fromFirestore: UserDoc.fromFirestore, toFirestore: (UserDoc userDoc, optoins) => userDoc.toFirestore())
+    final docRef = users.withConverter(fromFirestore: UserDoc.fromFirestore, toFirestore: (UserDoc userDoc, options) => userDoc.toFirestore())
         .doc("${user.uid}");
     await docRef.set(user);
   }

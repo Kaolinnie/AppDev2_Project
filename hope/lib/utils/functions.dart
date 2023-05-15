@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 enum ImageType {
   profilePic,
@@ -11,69 +13,30 @@ enum ImageType {
 
 class UploadImage {
   final _fb = FirebaseStorage.instance;
+  final _currentUser = FirebaseAuth.instance.currentUser;
 
   UploadTask? _uploadTask;
   late XFile _image;
 
-  Future selectFile(ImageType type) async {
+  Future uploadProfilePic() async {
     final result = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 512,
-        maxHeight: 512,
-        imageQuality: 75
+        source: ImageSource.gallery
     );
     _image = result!;
 
-    String path = '';
-
-    switch(type){
-      case ImageType.profilePic:
-        path = 'images/profiles/${_image.name}';
-        break;
-      case ImageType.petPic:
-        path = 'images/pets/${_image.name}';
-        break;
-      case ImageType.postPic:
-        path = 'images/posts/${_image.name}';
-        break;
-    }
-
-    return _uploadFile(path);
-  }
-
-  Future _uploadFile(String path) async {
     final file = File(_image.path);
+    final dir = dirname(file.path);
+    final ext = extension(file.path);
+    final newFile = await file.rename("$dir/profile_pic$ext");
+    final finalPath = "/users/${_currentUser?.uid}/${basename(newFile.path)}";
 
-    final ref = _fb.ref().child(path);
-    _uploadTask = ref.putFile(file);
+    final ref = _fb.ref().child(finalPath);
+    _uploadTask = ref.putFile(newFile);
 
     final snapshot = await _uploadTask!.whenComplete(() => {});
 
     final urlDownload = await snapshot.ref.getDownloadURL();
 
     return urlDownload;
-  }
-}
-
-
-class Functions {
-   static Future<String> pickUploadImage() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 512,
-      maxHeight: 512,
-      imageQuality: 75
-    );
-
-    String path = '';
-
-    Reference ref = FirebaseStorage.instance.ref().child("profilepic.jpg");
-
-    await ref.putFile(File(image!.path));
-    ref.getDownloadURL().then((value) {
-      path = value;
-    });
-
-    return path;
   }
 }

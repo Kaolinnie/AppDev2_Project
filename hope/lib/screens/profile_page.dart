@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hope/authentication/auth.dart';
@@ -16,6 +18,14 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final User? user = Auth().currentUser;
+  String? _photo;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _photo = user?.photoURL;
+  }
 
   Future<void> signOut() async {
     await Auth().signOut();
@@ -23,20 +33,21 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> editProfile() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
   }
-  Widget _userUid() => Text(user?.email ?? 'User email');
   Widget _signOutButton() => IconButton(
     icon: const Icon(Icons.logout),
     onPressed: signOut,
   );
 
   Widget _userPhoto() => ClipRRect(
-      borderRadius: BorderRadius.circular(100),
-      child: Image.network(
-        user?.photoURL??'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
+    borderRadius: BorderRadius.circular(100),
+    child: Image.network(
+        _photo??'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
         height: 150,
         width: 150,
-      ),
+        fit: BoxFit.cover
+    ),
   );
+
 
   Widget _profilePic() => Stack(
     alignment: Alignment.bottomRight,
@@ -45,11 +56,13 @@ class _ProfilePageState extends State<ProfilePage> {
       GestureDetector(
         onTap: () async {
           var ui = UploadImage();
-          String path = await ui.selectFile(ImageType.profilePic);
+          String path = await ui.uploadProfilePic();
 
           if(path!=''){
             Auth().updatePhoto(photoUrl: path);
-            setState(() {});
+            setState(() {
+              _photo = path;
+            });
           }
         },
         child: CircleAvatar(
@@ -83,7 +96,10 @@ class _ProfilePageState extends State<ProfilePage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _profile(),
-        Text('${user?.phoneNumber}'),
+        // GridView.builder(
+        //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent,
+        //     itemBuilder: itemBuilder
+        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
