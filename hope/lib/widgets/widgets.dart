@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/color_utils.dart';
+
 TextField reusableText(String text, IconData icon, bool isPasswordType, TextEditingController controller) {
   return TextField(
     controller: controller,
@@ -111,8 +113,11 @@ SizedBox gap({double? size = 15}){
   );
 }
 
-
-
+SnackBar errorMessage(errorMsg) => SnackBar(
+  content: Text(errorMsg!),
+  backgroundColor: customHex("#f04856"),
+  behavior: SnackBarBehavior.floating,
+);
 
 
 

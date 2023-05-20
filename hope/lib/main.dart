@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hope/settings.dart';
 import 'package:hope/utils/color_utils.dart';
 import 'package:hope/widget_tree.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Map<Permission, PermissionStatus> statuses = await [
+    Permission.location,
+    Permission.storage,
+  ].request();
+
+  // SettingsPrefs().setDefaults();
 
   runApp(const MyApp());
 }

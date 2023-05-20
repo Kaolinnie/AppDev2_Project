@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _userPhoto(),
       GestureDetector(
         onTap: () async {
-          var ui = UploadImage();
+          var ui = Images();
           String path = await ui.uploadProfilePic();
 
           if(path!=''){

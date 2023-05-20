@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hope/authentication/auth.dart';
 import 'package:hope/screens/home_page.dart';
-import 'package:hope/screens/pop_up/adopt_page.dart';
+import 'package:hope/screens/adopt_page.dart';
 import 'package:hope/screens/pop_up/settings.dart';
 import 'package:hope/screens/posts_page.dart';
 import 'package:hope/screens/profile_page.dart';

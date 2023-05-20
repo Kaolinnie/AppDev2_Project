@@ -5,6 +5,7 @@ class UserDoc {
   String? email;
   String? firstName, lastName;
 
+
   UserDoc({required this.uid, required this.email, required this.firstName, required this.lastName});
 
   factory UserDoc.fromFirestore(
@@ -27,5 +28,21 @@ class UserDoc {
       if (firstName != null) "firstName" : firstName,
       if (lastName != null) "lastName" : lastName
     };
+  }
+
+  // //maps fetch fields
+  // toJson() {
+  //   return{"uid": uid, "email":email, "firstname":firstName, "lastname":lastName};
+  // }
+
+  //saves it into a reusable format
+  factory UserDoc.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document){
+    final data = document.data()!;
+    return UserDoc(
+        uid: data["uid"],
+        email: data["email"],
+        firstName: data["firstName"],
+        lastName: data["lastName"]
+    );
   }
 }
