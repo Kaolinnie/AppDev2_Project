@@ -20,8 +20,7 @@ dependencies:
   rxdart: ^0.27.7
   image_picker: ^0.8.7+5
   firebase_storage: ^11.2.0
-  path: ^1.8.3
-  syncfusion_flutter_datepicker: ^21.2.5
+  path: ^1.8.2
   geolocator: ^9.0.2
   http: ^0.13.6
   path_provider: ^2.0.15
@@ -29,6 +28,8 @@ dependencies:
   permission_handler: ^10.2.0
   intl: ^0.18.1
   shared_preferences: ^2.1.1
+  calendar_date_picker2: ^0.5.2
+  memory_cache: ^1.2.0
 
 dev_dependencies:
   flutter_test:

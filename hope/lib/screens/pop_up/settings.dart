@@ -32,7 +32,7 @@ class _SettingsState extends State<SettingsPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ListTile(
-                            leading: Icon(Icons.zoom_in),
+                            leading: const Icon(Icons.zoom_in),
                             title: Slider(
                               value: zoomLevel!,
                               onChanged: (value) {
@@ -57,7 +57,7 @@ class _SettingsState extends State<SettingsPage> {
                 )
             );
           } else {
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
         },
     );

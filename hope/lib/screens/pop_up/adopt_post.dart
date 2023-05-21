@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hope/utils/datepicker.dart';
 import 'package:hope/utils/location.dart';
 import 'package:hope/widgets/widgets.dart';
+import 'package:intl/intl.dart';
 
 import '../../authentication/collections.dart';
 import '../../utils/color_utils.dart';
 import '../../utils/functions.dart';
-
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class AdoptPost extends StatefulWidget {
   const AdoptPost({Key? key}) : super(key: key);
@@ -71,8 +71,9 @@ class _AdoptPostState extends State<AdoptPost> {
   final breedTec = TextEditingController();
   final speciesTec = TextEditingController();
   final statusTec = TextEditingController();
+  final priceTec = TextEditingController();
 
-  late DateTime date;
+  DateTime date = DateTime.now();
 
 
   @override
@@ -94,21 +95,35 @@ class _AdoptPostState extends State<AdoptPost> {
                 reusableText2("Species", speciesTec),
                 SizedBox(height: 10),
                 reusableText2("Breed", breedTec),
-                SizedBox(height: 50),
-                SfDateRangePicker(
-                  view: DateRangePickerView.month,
-                  showTodayButton: true,
-                  onSelectionChanged: (args) {
-                    date = args.value;
-                  },
+                SizedBox(height: 10),
+                reusableText2('Price', priceTec, textInputType: TextInputType.number),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                        onPressed: getDate ,
+                        child: Text('Date of Birth')
+                    ),
+                    Text(DateFormat('yyyy-MM-dd').format(date))
+                  ],
                 ),
+                SizedBox(height: 50),
+
                 ElevatedButton(
                     onPressed: () async {
                       final species = speciesTec.text;
                       final breed = breedTec.text;
 
+                      double price;
+
                       if(species == '' || breed == '' || date == null) {
                         _sendErrorMessage('Missing fields');
+                        return;
+                      }
+                      try {
+                        price = double.parse(double.parse(priceTec.text).toStringAsFixed(2));
+                      } on FormatException catch (e){
+                        _sendErrorMessage('Bad format: price');
                         return;
                       }
 
@@ -116,7 +131,8 @@ class _AdoptPostState extends State<AdoptPost> {
 
                       final url = await Images().uploadAdoptionPic(_photo!);
 
-                      Collections().createAdoption(breed,date,location.toString(),species,url);
+
+                      Collections().createAdoption(breed,date,location.latitude,location.longitude,species,url,price);
 
                       Navigator.pop(context);
                     },
@@ -131,6 +147,14 @@ class _AdoptPostState extends State<AdoptPost> {
         )
     );
   }
+  void getDate() async {
+    final results =(await pickDate(context))[0];
+    setState(() {
+      date = results;
+
+    });
+  }
+
   void _sendErrorMessage(msg) {
     ScaffoldMessenger.of(context).showSnackBar(errorMessage(msg));
   }

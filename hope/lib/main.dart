@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hope/settings.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hope/utils/color_utils.dart';
 import 'package:hope/widget_tree.dart';
+import 'package:memory_cache/memory_cache.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
@@ -12,8 +13,9 @@ void main() async {
     Permission.location,
     Permission.storage,
   ].request();
-
-  // SettingsPrefs().setDefaults();
+  final location = await Geolocator.getCurrentPosition();
+  MemoryCache.instance.create('latitude',location.latitude);
+  MemoryCache.instance.create('longitude',location.longitude);
 
   runApp(const MyApp());
 }

@@ -15,6 +15,9 @@ class AdoptPage extends StatefulWidget {
 class _AdoptPageState extends State<AdoptPage> {
   double? zoomLevel;
 
+  late List<AdoptDoc> adoptData;
+  late List<AdoptDoc> filteredData;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -30,16 +33,21 @@ class _AdoptPageState extends State<AdoptPage> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasData) {
-                        List<AdoptDoc> adoptData =
+                        adoptData =
                             snapshot.data as List<AdoptDoc>;
+                        filteredData = adoptData;
 
-                        return ListView.builder(
-                          itemCount: adoptData.length,
-                          itemBuilder: (context, index) {
-                            AdoptDoc adoptDoc = adoptData[index];
-                            return adoptDoc.toListTile(context, zoomLevel!);
-                          },
+                        return RefreshIndicator(
+                            onRefresh: refreshList,
+                            child: ListView.builder(
+                              itemCount: adoptData.length,
+                              itemBuilder: (context, index) {
+                                AdoptDoc adoptDoc = filteredData[index];
+                                return adoptDoc.toListTile(context, zoomLevel!);
+                              },
+                            )
                         );
+
                       } else if (snapshot.hasError) {
                         return Center(child: Text(snapshot.error.toString()));
                       }
@@ -47,20 +55,46 @@ class _AdoptPageState extends State<AdoptPage> {
                     return const Center(child: CircularProgressIndicator());
                   },
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AdoptPost()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(50, 50),
-                      shape: const CircleBorder(),
-                    ),
-                    child: Icon(Icons.add))
+                SizedBox(
+                  height: 120,
+                  width: 60,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            // filter adoptions
+                          },
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(50, 50),
+                            shape: const CircleBorder(),
+                          ),
+                          child: Icon(Icons.filter_alt)),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => AdoptPost()));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(50, 50),
+                            shape: const CircleBorder(),
+                          ),
+                          child: Icon(Icons.add))
+                    ],
+                  ),
+                ),
               ],
             );
           }
-          return CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         });
+  }
+
+  Future<void> refreshList() async {
+    var tmp = await Collections().allAdoptions();
+    setState(() {
+      adoptData = tmp;
+      filteredData = tmp;
+    });
   }
 }
