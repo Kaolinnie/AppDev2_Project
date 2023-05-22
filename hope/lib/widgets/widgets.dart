@@ -113,15 +113,28 @@ SizedBox gap({double? size = 15}){
   );
 }
 
-SnackBar errorMessage(errorMsg) => SnackBar(
+SnackBar errorMessage(errorMsg,context) => SnackBar(
   content: Text(errorMsg!),
-  backgroundColor: customHex("#f04856"),
+  backgroundColor: Theme.of(context).primaryColor,
   behavior: SnackBarBehavior.floating,
 );
 
 
 
-
+TextFormField formField(hint,controller) => TextFormField(
+  controller: controller,
+  decoration: InputDecoration(
+    contentPadding: const EdgeInsets.symmetric(
+      horizontal: 20,
+      vertical: 20,
+    ),
+    hintText: hint,
+    hintStyle: const TextStyle(fontSize: 14),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(15),
+    ),
+  ),
+);
 
 
 

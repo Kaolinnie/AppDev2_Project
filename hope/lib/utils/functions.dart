@@ -27,12 +27,12 @@ class Images {
     return File(result!.path);
   }
 
-  Future uploadAdoptionPic(File photo) async {
+  Future uploadPic(File photo, String type) async {
     final ext = extension(photo.path);
     final datetime = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd_kk:mm').format(datetime);
     final newFile = await _changeFileNameOnly(photo, "$formattedDate$ext");
-    final finalPath = "/adoptions/${_currentUser?.uid}/${basename(newFile.path)}";
+    final finalPath = "/$type/${_currentUser?.uid}/${basename(newFile.path)}";
     final ref = _fb.ref().child(finalPath);
     _uploadTask = ref.putFile(newFile);
     final snapshot = await _uploadTask!.whenComplete(() => {});

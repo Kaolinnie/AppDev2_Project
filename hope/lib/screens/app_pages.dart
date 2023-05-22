@@ -4,7 +4,7 @@ import 'package:hope/authentication/auth.dart';
 import 'package:hope/screens/home_page.dart';
 import 'package:hope/screens/adopt_page.dart';
 import 'package:hope/screens/pop_up/settings.dart';
-import 'package:hope/screens/posts_page.dart';
+import 'package:hope/screens/feed_page.dart';
 import 'package:hope/screens/profile_page.dart';
 import 'dart:async';
 
@@ -28,7 +28,7 @@ class _AppPageState extends State<AppPage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    PostsPage(),
+    FeedPage(),
     AdoptPage(),
     ProfilePage()
   ];
@@ -112,8 +112,8 @@ class _AppPageState extends State<AppPage> {
                 label: 'Home'
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.add_box_outlined),
-                label: 'Post'
+                icon: Icon(Icons.feed),
+                label: 'Feed'
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.pets),

@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserDoc {
+  static final _users = FirebaseFirestore.instance.collection('users');
+  static final _currentUser = FirebaseAuth.instance.currentUser;
+  static final _db = FirebaseFirestore.instance;
+
   String? uid;
   String? email;
   String? firstName, lastName;
@@ -30,12 +35,6 @@ class UserDoc {
     };
   }
 
-  // //maps fetch fields
-  // toJson() {
-  //   return{"uid": uid, "email":email, "firstname":firstName, "lastname":lastName};
-  // }
-
-  //saves it into a reusable format
   factory UserDoc.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document){
     final data = document.data()!;
     return UserDoc(
@@ -44,5 +43,29 @@ class UserDoc {
         firstName: data["firstName"],
         lastName: data["lastName"]
     );
+  }
+
+  static Future createUser(firstName, lastName) async {
+    final user = UserDoc(
+        firstName: firstName,
+        lastName: lastName,
+        uid: _currentUser!.uid,
+        email: _currentUser!.email??''
+    );
+    final docRef = _users.withConverter(fromFirestore: UserDoc.fromFirestore, toFirestore: (UserDoc userDoc, options) => userDoc.toFirestore())
+        .doc("${user.uid}");
+    await docRef.set(user);
+  }
+
+  static Future<UserDoc> getUserDetails(String email) async {
+    final snapshot = await _db.collection("users").where("email", isEqualTo: email).get();
+    final userData = snapshot.docs.map((e) => UserDoc.fromSnapshot(e)).single;
+    return userData;
+  }
+
+  static Future<List<UserDoc>> allUsers() async {
+    final snapshot = await _db.collection("users").get();
+    final userData = snapshot.docs.map((e) => UserDoc.fromSnapshot(e)).toList();
+    return userData;
   }
 }

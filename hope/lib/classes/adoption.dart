@@ -6,6 +6,8 @@ import 'package:hope/screens/pop_up/pet_details.dart';
 import 'package:memory_cache/memory_cache.dart';
 
 class AdoptDoc {
+  String? animalID;
+
   String? breed, species, status, picture;
   DateTime? timeStamp, birthDate;
   double? price;
@@ -92,7 +94,7 @@ class AdoptDoc {
       elevation: 5,
       child: InkWell(
           onTap: () {
-            Navigator.push(context,MaterialPageRoute(builder: (context) => PetDetails(adoptDoc: this)));
+            // Navigator.push(context,MaterialPageRoute(builder: (context) => PetDetails(adoptDoc: this)));
           },
           child: SizedBox(
               width: double.infinity,

@@ -46,7 +46,7 @@ class _SignInUpScreenState extends State<SignInUpScreen> {
 
     try {
       await Auth().createUserWithEmailAndPassword(email: emailTec.text, password: passwordTec.text, displayName: "${firstNameTec.text} ${lastNameTec.text}");
-      await Collections().createUser(firstNameTec.text, lastNameTec.text);
+      await UserDoc.createUser(firstNameTec.text, lastNameTec.text);
     } on FirebaseAuthException catch(e) {
       errorMessage = e.message;
       _sendErrorMessage();

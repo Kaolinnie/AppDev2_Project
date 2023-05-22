@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hope/classes/adoption.dart';
 import 'package:hope/utils/datepicker.dart';
 import 'package:hope/utils/location.dart';
 import 'package:hope/widgets/widgets.dart';
@@ -61,7 +62,7 @@ class _AdoptPostState extends State<AdoptPost> {
             },
             child: CircleAvatar(
                 radius: 20,
-                backgroundColor: customHex("#f04856"),
+                backgroundColor: Theme.of(context).primaryColor,
                 child: const Icon(Icons.add, size: 25, color: Colors.white)
             ),
           )
@@ -129,10 +130,10 @@ class _AdoptPostState extends State<AdoptPost> {
 
                       final location = await getPosition();
 
-                      final url = await Images().uploadAdoptionPic(_photo!);
+                      final url = await Images().uploadPic(_photo!,'adoptions');
 
 
-                      Collections().createAdoption(breed,date,location.latitude,location.longitude,species,url,price);
+                      // AdoptDoc.createAdoption(breed,date,location.latitude,location.longitude,species,url,price);
 
                       Navigator.pop(context);
                     },
@@ -156,6 +157,6 @@ class _AdoptPostState extends State<AdoptPost> {
   }
 
   void _sendErrorMessage(msg) {
-    ScaffoldMessenger.of(context).showSnackBar(errorMessage(msg));
+    ScaffoldMessenger.of(context).showSnackBar(errorMessage(msg,context));
   }
 }
