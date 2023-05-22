@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hope/authentication/auth.dart';
 import 'package:hope/screens/pop_up/addAnimal.dart';
+import 'package:hope/screens/pop_up/edit_pet.dart';
 import 'package:hope/screens/pop_up/edit_profile.dart';
 import 'package:hope/utils/functions.dart';
 import 'package:hope/widgets/userWidgets.dart';
@@ -36,6 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> editProfile() async {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => EditProfile()));
+  }
+
+  Future<void> editAnimal() async {
+    Navigator.push(
+      context, MaterialPageRoute(builder: (context) => EditAnimal()));
   }
 
   Widget _signOutButton() =>
@@ -114,6 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _profile(),
+            Text("My Animals", style: TextStyle(fontSize: 20),),
             Expanded(
               child: FutureBuilder(
                 future: Animal.getMyAnimals(),
@@ -131,23 +138,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: 100,
                                     height: 100
                                 ),
-                                Text('${myAnimals[index].name}'),
-                                Row(
+                                Text(' ${myAnimals[index].name}'),
+                                Expanded(child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
                                         onPressed: () {
-                                          edit(index);
+                                          editAnimal;
                                         },
                                         icon: const Icon(Icons.edit)
                                     ),
                                     IconButton(
                                         onPressed: () {
                                           delete(index);
+
                                         },
                                         icon: const Icon(Icons.delete)
                                     )
                                   ],
-                                ),
+                                ),)
+
                               ],
                             ),
                       )
@@ -187,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> delete(index) async {
-    return;
+    Animal.delAnimal(myAnimals[index].docID!);
   }
   Future<void> edit(index) async {
     return;

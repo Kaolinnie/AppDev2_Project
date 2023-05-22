@@ -103,6 +103,11 @@ class Animal {
     await docRef.set(animal);
   }
 
+  static Future delAnimal(String index) async {
+    _animals.doc(index).delete();
+    print(index);
+  }
+
   static Future<List<Animal>> getAnimals() async {
     final snapshot = await _animals.get();
     final animalData =

@@ -29,7 +29,6 @@ class _AppPageState extends State<AppPage> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     FeedPage(),
-    AdoptPage(),
     ProfilePage()
   ];
 
@@ -114,10 +113,6 @@ class _AppPageState extends State<AppPage> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.feed),
                 label: 'Feed'
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.pets),
-                label: 'Adopt'
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person),

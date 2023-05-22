@@ -33,9 +33,18 @@ class _PetDetailsState extends State<PetDetails> {
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("${pet.species}")
+                      ClipRRect(
+                        child: Image.network(pet.imagePath!),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      Text("${pet.species?.toUpperCase()}", style: TextStyle(fontSize: 20)),
+                      Text("${pet.breed?.toUpperCase()}", style: TextStyle(fontSize: 20)),
+                      Text("Age: 4", style: TextStyle(fontSize: 20)),
+                      ElevatedButton(onPressed: (){
+                        //send email code
+                      }, child: Text("Contact Owner"))
                     ],
 
                   ),
